@@ -30,7 +30,7 @@
 %define pkg_group Productivity/Clustering/HA
 %endif
 
-%{!?python_sitelib: %define python_sitelib %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?python_sitelib: %define python_sitelib %(python3 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name:           crmsh
 Summary:        High Availability cluster command-line interface
@@ -41,22 +41,26 @@ Release:        0
 Url:            http://crmsh.github.io
 Source0:        %{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+%if 0%{?suse_version}
+# Requiring pacemaker makes crmsh harder to build on other distributions,
+# and is mostly a convenience feature. So only do it for SUSE.
 Requires(pre):  pacemaker
+%endif
 Requires:       %{name}-scripts >= %{version}-%{release}
 Requires:       /usr/bin/which
-Requires:       python >= 2.6
-Requires:       python-dateutil
-Requires:       python-lxml
-Requires:       python-parallax
-BuildRequires:  python-lxml
-BuildRequires:  python-setuptools
+Requires:       python3 >= 3.4
+Requires:       python3-dateutil
+Requires:       python3-lxml
+Requires:       python3-parallax
+BuildRequires:  python3-lxml
+BuildRequires:  python3-setuptools
 
 %if 0%{?suse_version}
-Requires:       python-PyYAML
+Requires:       python3-PyYAML
 # Suse splits this off into a separate package
-Requires:       python-curses
+Requires:       python3-curses
 BuildRequires:  fdupes
-BuildRequires:  python-curses
+BuildRequires:  python3-curses
 %endif
 
 %if 0%{?fedora_version}
@@ -68,7 +72,7 @@ BuildRequires:  asciidoc
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  pkgconfig
-BuildRequires:  python
+BuildRequires:  python3
 
 %if 0%{?suse_version} > 1210
 # xsltproc is necessary for manpage generation; this is split out into
@@ -77,7 +81,7 @@ BuildRequires:  python
 BuildRequires:  libxslt-tools
 %endif
 
-%if 0%{?suse_version} > 1110
+%if 0%{?suse_version} > 1110 || 0%{?fedora_version} || 0%{?centos_version} || 0%{?rhel_version} || 0%{?rhel} || 0%{?fedora}
 BuildArch:      noarch
 %endif
 
@@ -92,29 +96,26 @@ Summary:        Test package for crmsh
 Group:          %{pkg_group}
 Requires:       crmsh
 %if 0%{?with_regression_tests}
-BuildRequires:  mailx
-BuildRequires:  procps
-BuildRequires:  python-dateutil
-BuildRequires:  python-nose
-BuildRequires:  python-parallax
-BuildRequires:  vim
-Requires:       pacemaker
+Requires(post):  mailx
+Requires(post):  procps
+Requires(post):  python3-dateutil
+Requires(post):  python3-nose
+Requires(post):  python3-parallax
+Requires(post):  pacemaker
 
 %if 0%{?suse_version} > 1110
 BuildArch:      noarch
 %endif
 
 %if 0%{?suse_version}
-BuildRequires:  libglue-devel
-BuildRequires:  libpacemaker-devel
+Requires(post):  libglue-devel
 %else
-BuildRequires:  cluster-glue-libs-devel
-BuildRequires:  pacemaker-libs-devel
+Requires(post):  cluster-glue-libs-devel
 %endif
 %if 0%{?fedora_version}
-BuildRequires:  PyYAML
+Requires(post):  PyYAML
 %else
-BuildRequires:  python-PyYAML
+Requires(post):  python3-PyYAML
 %endif
 
 %endif
@@ -196,8 +197,7 @@ fi
 %defattr(-,root,root)
 
 %{_sbindir}/crm
-%{python_sitelib}/crmsh
-%{python_sitelib}/crmsh*.egg-info
+%{python_sitelib}/crmsh*
 
 %{_datadir}/%{name}
 %exclude %{_datadir}/%{name}/tests
