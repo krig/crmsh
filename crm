@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 #
 # Copyright (C) 2008-2015 Dejan Muhamedagic <dmuhamedagic@suse.de>
 # Copyright (C) 2013-2015 Kristoffer Gronlund <kgronlund@suse.com>
@@ -8,7 +8,7 @@
 import sys
 from distutils import version
 
-minimum_version = '2.6'
+minimum_version = '3.4.1'
 v_min = version.StrictVersion(minimum_version)
 v_this = version.StrictVersion(sys.version[:3])
 if v_min > v_this:
@@ -37,10 +37,9 @@ try:
 except AttributeError as msg:
     sys.stderr.write('''Fatal error: %s
 
-    Failed to start crmsh! This is likely due to having
-    configured Python 3 as the default python version.
-    crmsh requires Python 2.6 or higher, but not (yet)
-    Python 3.
+    Failed to start crmsh!
+
+    crmsh requires Python 3.4.1 or higher.
 ''' % (msg))
     sys.exit(-1)
 

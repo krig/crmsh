@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Output a combined news.adoc document
 Also write an Atom feed document

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import crm_script
 
 rc, _, err = crm_script.call(['crm', 'cluster', 'wait_for_startup', '30'])

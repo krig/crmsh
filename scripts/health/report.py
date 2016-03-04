@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import crm_script
 data = crm_script.get_input()
 health_report = data[1]

@@ -1,13 +1,22 @@
 #!/bin/sh
-case `pwd` in
+
+exists() {
+	which "$1" >/dev/null 2>&1
+}
+
+TESTER=nosetests-3.4
+exists $TESTER || TESTER=nosetests3
+exists $TESTER || TESTER=nosetests
+
+case $(pwd) in
 	*/test/unittests)
-		PYTHONPATH=../.. nosetests -w . "$@"
+		PYTHONPATH=../.. $TESTER -w . "$@"
 		;;
 	*/test)
-		PYTHONPATH=.. nosetests -w unittests "$@"
+		PYTHONPATH=.. $TESTER -w unittests "$@"
 		;;
 	*)
-		PYTHONPATH=. nosetests -w test/unittests "$@"
+		PYTHONPATH=. $TESTER -w test/unittests "$@"
 		;;
 esac
 

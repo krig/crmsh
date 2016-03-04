@@ -335,7 +335,7 @@ class Actions(object):
         input: list of packages
         or: map of <os>: <packages>
         """
-        self._run.execute_shell(self._nodes or 'all', '''#!/usr/bin/env python
+        self._run.execute_shell(self._nodes or 'all', '''#!/usr/bin/env python3
 import crm_script
 import crm_init
 
@@ -349,7 +349,7 @@ crm_script.exit_ok(True)
             for v in s.items():
                 values.append(v)
         services = "\n".join([('crm_script.service%s' % repr(v)) for v in values])
-        self._run.execute_shell(self._nodes or 'all', '''#!/usr/bin/env python
+        self._run.execute_shell(self._nodes or 'all', '''#!/usr/bin/env python3
 import crm_script
 import crm_init
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import crm_script
 show_all = crm_script.is_true(crm_script.param('show_all'))
 uptimes = list(crm_script.output(1).items())
