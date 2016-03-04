@@ -1587,11 +1587,11 @@ class CliParser(object):
             except Exception as e:
                 common_err(e)
                 return False
-        if isinstance(s, str):
-            if s and s.startswith('#'):
+        if isinstance(s, bytes):
+            if s and s.startswith(b'#'):
                 self.comments.append(s)
                 return None
-            if s.startswith('xml'):
+            if s.startswith(b'xml'):
                 s = self._xml_lex(s)
             else:
                 s = shlex.split(s)
