@@ -6,7 +6,7 @@ import time
 import datetime
 import re
 import glob
-import ConfigParser
+import configparser
 
 from . import config
 from . import constants
@@ -327,7 +327,7 @@ class Log(object):
                 self.f[log] = gzip.open(log)
             else:
                 self.f[log] = open(log)
-        except IOError, msg:
+        except IOError as msg:
             common_err("open %s: %s" % (log, msg))
 
     def open_logs(self):
@@ -481,7 +481,7 @@ def update_loginfo(rptlog, logfile, oldpos, appended_file):
         f = open("%s.info" % rptlog, "w")
         f.write("%s %d\n" % (logfile, newpos))
         f.close()
-    except IOError, msg:
+    except IOError as msg:
         common_err("couldn't the update %s.info: %s" % (rptlog, msg))
 
 
@@ -536,7 +536,7 @@ def transition_start_re(number_re):
     m2 = "pengine.*Transition ([0-9]+):.*([^ ]*/pe-[^-]+-(%s)[.]bz2)" % (number_re)
     try:
         return re.compile("(?:%s)|(?:%s)" % (m1, m2))
-    except re.error, e:
+    except re.error as e:
         common_debug("RE compilation failed: %s" % (e))
         raise ValueError("Error in search expression")
 
@@ -548,7 +548,7 @@ def transition_end_re(number_re):
     """
     try:
         return re.compile("crmd.*Transition ([0-9]+).*Source=(.*/pe-[^-]+-(%s)[.]bz2).:.*(Stopped|Complete|Terminated)" % (number_re))
-    except re.error, e:
+    except re.error as e:
         common_debug("RE compilation failed: %s" % (e))
         raise ValueError("Error in search expression")
 
@@ -626,15 +626,15 @@ class Transition(object):
         return os.path.basename(self.pe_file).replace(".bz2", "")
 
     def transition_info(self):
-        print "Transition %s (%s -" % (self, shorttime(self.start_ts)),
+        print("Transition %s (%s -" % (self, shorttime(self.start_ts)), end=' ')
         if self.end_msg:
-            print "%s):" % shorttime(self.end_ts)
+            print("%s):" % shorttime(self.end_ts))
             act_d = run_graph_msg_actions(self.end_msg)
             total = sum(act_d.values())
             s = ", ".join(["%d %s" % (act_d[x], x) for x in act_d if act_d[x]])
-            print "\ttotal %d actions: %s" % (total, s)
+            print("\ttotal %d actions: %s" % (total, s))
         else:
-            print "[unfinished])"
+            print("[unfinished])")
 
 
 def mkarchive(dir):
@@ -650,7 +650,7 @@ def mkarchive(dir):
         common_err('could not pack report, command "%s" failed' % cmd)
         return False
     else:
-        print "Report saved in '%s'" % archive
+        print("Report saved in '%s'" % archive)
     return True
 
 CH_SRC, CH_TIME, CH_UPD = 1, 2, 3
@@ -713,7 +713,7 @@ class Report(object):
         common_warn("%s: %s" % (self.source, s))
 
     def rsc_list(self):
-        return self.cibgrp_d.keys() + self.cibcln_d.keys() + self.cibrsc_l
+        return list(self.cibgrp_d.keys()) + list(self.cibcln_d.keys()) + self.cibrsc_l
 
     def node_list(self):
         return self.node_l
@@ -758,7 +758,7 @@ class Report(object):
         if parentdir:
             try:
                 os.chdir(parentdir)
-            except OSError, msg:
+            except OSError as msg:
                 self.error(msg)
                 return None
         try:
@@ -767,7 +767,7 @@ class Report(object):
                 common_debug("top directory in tarball: %s, doesn't match the tarball name: %s" %
                              (tf_loc, loc))
                 loc = os.path.join(os.path.dirname(loc), tf_loc)
-        except Exception, msg:
+        except Exception as msg:
             common_err("%s: %s" % (tarball, msg))
             return None
         common_debug("tar -x%s < %s" % (tar_unpack_option, bfname))
@@ -899,7 +899,7 @@ class Report(object):
             return []
         try:
             f = open(fl[0])
-        except IOError, msg:
+        except IOError as msg:
             common_err("open %s: %s" % (fl[0], msg))
             return []
         return f.readlines()
@@ -1342,7 +1342,7 @@ class Report(object):
         Print log lines, either matched by re_l or all.
         '''
         def process(r):
-            return re.compile(r) if isinstance(r, basestring) else r
+            return re.compile(r) if isinstance(r, str) else r
         if not log_l:
             log_l = self.log_l
         if not log_l:
@@ -1356,7 +1356,7 @@ class Report(object):
     def get_desc_line(self, fld):
         try:
             f = open(self.desc)
-        except IOError, msg:
+        except IOError as msg:
             common_err("open %s: %s" % (self.desc, msg))
             return
         for s in f:
@@ -1398,7 +1398,7 @@ class Report(object):
                 import dateutil.tz
                 return make_datetime_naive(datetime.datetime.fromtimestamp(myts).replace(tzinfo=dateutil.tz.tzlocal()))
             common_debug("No log lines with timestamps found in report")
-        except Exception, e:
+        except Exception as e:
             common_debug("Error: %s" % (e))
         return None
 
@@ -1423,7 +1423,7 @@ class Report(object):
                                 self._str_dt(self.get_rpt_dt(self.to_dt, "bottom"))),
                                "Nodes: %s" % ' '.join([self._str_nodecolor(x, x)
                                                        for x in self.node_l]),
-                               "Groups: %s" % ' '.join(self.cibgrp_d.keys()),
+                               "Groups: %s" % ' '.join(list(self.cibgrp_d.keys())),
                                "Resources: %s" % ' '.join(self.cibrsc_l),
                                "Transitions: %s" % self.short_peinputs_list()
                                )))
@@ -1479,7 +1479,7 @@ class Report(object):
             common_err("%s: transition not found" % rpt_pe_file)
             return False
         for tag in t_obj.tags:
-            print tag
+            print(tag)
         return True
 
     def _set_transition_tags(self, transition):
@@ -1582,9 +1582,9 @@ class Report(object):
                 a.append(a[0])
         elif a is not None:
             a = [a, a]
-        l = [long and self.pe_detail_format(t_obj) or self.pe_report_path(t_obj)
+        l = [int and self.pe_detail_format(t_obj) or self.pe_report_path(t_obj)
              for t_obj in self._transitions if pe_file_in_range(t_obj.pe_file, a)]
-        if long:
+        if int:
             l = [self.pe_details_header, self.pe_details_separator] + l
         return l
 
@@ -1622,7 +1622,7 @@ class Report(object):
         - detail
         TODO
         '''
-        p = ConfigParser.SafeConfigParser()
+        p = configparser.SafeConfigParser()
         p.add_section(self.rpt_section)
         p.set(self.rpt_section, 'dir',
               self.source == "live" and dir or self.source)
@@ -1635,7 +1635,7 @@ class Report(object):
         fname = os.path.join(dir, self.state_file)
         try:
             f = open(fname, "wb")
-        except IOError, msg:
+        except IOError as msg:
             common_err(msg)
             return False
         p.write(f)
@@ -1646,11 +1646,11 @@ class Report(object):
         '''
         Load the history state from a file.
         '''
-        p = ConfigParser.SafeConfigParser()
+        p = configparser.SafeConfigParser()
         fname = os.path.join(dir, self.state_file)
         try:
             p.read(fname)
-        except Exception, msg:
+        except Exception as msg:
             common_err(msg)
             return False
         rc = True
@@ -1672,10 +1672,10 @@ class Report(object):
                     common_warn("unknown item %s in the session state file %s" %
                                 (n, fname))
             rc |= self.manage_excludes("load", p)
-        except ConfigParser.NoSectionError, msg:
+        except configparser.NoSectionError as msg:
             common_err("session state file %s: %s" % (fname, msg))
             rc = False
-        except Exception, msg:
+        except Exception as msg:
             common_err("%s: bad value '%s' for '%s' in session state file %s" %
                        (msg, v, n, fname))
             rc = False
@@ -1731,7 +1731,7 @@ class Report(object):
             return False
         rc = True
         if cmd == "show":
-            print '\n'.join(self.log_filter_out)
+            print('\n'.join(self.log_filter_out))
         elif cmd == "clear":
             self.log_filter_out = []
             self.log_filter_out_re = []
@@ -1740,7 +1740,7 @@ class Report(object):
                 regex = re.compile(arg)
                 self.log_filter_out.append(arg)
                 self.log_filter_out_re.append(regex)
-            except Exception, msg:
+            except Exception as msg:
                 common_err("bad regex %s: %s" % (arg, msg))
                 rc = False
         elif cmd == "save" and self.log_filter_out:
@@ -1757,7 +1757,7 @@ class Report(object):
                     else:
                         common_warn("unknown item %s in the section %s" %
                                     (n, self.log_section))
-            except ConfigParser.NoSectionError:
+            except configparser.NoSectionError:
                 pass
         return rc
 

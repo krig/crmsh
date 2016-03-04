@@ -63,8 +63,8 @@ def show_output(dir, hosts, desc):
     for host in hosts:
         out_l = get_output(dir, host)
         if out_l:
-            print "%s %s:" % (host, desc)
-            print ''.join(out_l)
+            print("%s %s:" % (host, desc))
+            print(''.join(out_l))
 
 
 def do_pssh(l, opts):

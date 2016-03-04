@@ -54,7 +54,7 @@ def run_install():
 
 def check_results(parallax, results):
     failures = []
-    for host, result in results.items():
+    for host, result in list(results.items()):
         if isinstance(result, parallax.Error):
             failures.add("%s: %s" % (host, str(result)))
     if failures:

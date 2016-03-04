@@ -136,19 +136,19 @@ def _init():
     # Colors
     set_fg = _tigetstr('setf')
     if set_fg:
-        for i, color in zip(range(len(_COLORS)), _COLORS):
+        for i, color in zip(list(range(len(_COLORS))), _COLORS):
             setattr(colors, color, curses.tparm(set_fg, i) or '')
     set_fg_ansi = _tigetstr('setaf')
     if set_fg_ansi:
-        for i, color in zip(range(len(_ANSICOLORS)), _ANSICOLORS):
+        for i, color in zip(list(range(len(_ANSICOLORS))), _ANSICOLORS):
             setattr(colors, color, curses.tparm(set_fg_ansi, i) or '')
     set_bg = _tigetstr('setb')
     if set_bg:
-        for i, color in zip(range(len(_COLORS)), _COLORS):
+        for i, color in zip(list(range(len(_COLORS))), _COLORS):
             setattr(colors, 'BG_'+color, curses.tparm(set_bg, i) or '')
     set_bg_ansi = _tigetstr('setab')
     if set_bg_ansi:
-        for i, color in zip(range(len(_ANSICOLORS)), _ANSICOLORS):
+        for i, color in zip(list(range(len(_ANSICOLORS))), _ANSICOLORS):
             setattr(colors, 'BG_'+color, curses.tparm(set_bg_ansi, i) or '')
 
 

@@ -25,12 +25,12 @@ def roundtrip(cli, debug=False, expected=None):
     assert_is_not_none(obj)
     obj.nocli = True
     xml = obj.repr_cli(format=-1)
-    print xml
+    print(xml)
     obj.nocli = False
     s = obj.repr_cli(format=-1)
     if (s != cli) or debug:
-        print "GOT:", s
-        print "EXP:", cli
+        print("GOT:", s)
+        print("EXP:", cli)
     assert obj.cli_use_validate()
     if expected is not None:
         eq_(expected, s)
@@ -130,7 +130,7 @@ value="Stopped"/> \
     obj = factory.create_from_node(data)
     assert_is_not_none(obj)
     data = obj.repr_cli(format=-1)
-    print data
+    print(data)
     exp = 'primitive dummy ocf:pacemaker:Dummy op start timeout=60 interval=0 op stop timeout=60 interval=0 op monitor interval=60 timeout=30 meta target-role=Stopped'
     eq_(exp, data)
     assert obj.cli_use_validate()
@@ -153,7 +153,7 @@ value="Stopped"/> \
     obj = factory.create_from_node(data)
     assert_is_not_none(obj)
     data = obj.repr_cli(format=-1)
-    print data
+    print(data)
     exp = 'primitive dummy2 ocf:pacemaker:Dummy meta target-role=Stopped ' \
           'op start timeout=60 interval=0 op stop timeout=60 interval=0 ' \
           'op monitor interval=60 timeout=30'
@@ -175,7 +175,7 @@ target="ha-one"></fencing-level>
     obj = factory.create_from_node(data)
     assert_is_not_none(obj)
     data = obj.repr_cli(format=-1)
-    print data
+    print(data)
     exp = 'fencing_topology st1'
     eq_(exp, data)
     assert obj.cli_use_validate()
@@ -190,7 +190,7 @@ def test_master():
     data = etree.fromstring(xml)
     factory.create_from_cli("primitive dummy3 ocf:pacemaker:Dummy")
     data, _, _ = cibconfig.postprocess_cli(data)
-    print "after postprocess:", etree.tostring(data)
+    print("after postprocess:", etree.tostring(data))
     obj = factory.create_from_node(data)
     assert_is_not_none(obj)
     assert obj.cli_use_validate()

@@ -4,7 +4,7 @@ import os
 import stat
 
 host = crm_script.host()
-others = crm_script.output(2).keys()
+others = list(crm_script.output(2).keys())
 others.remove(host)
 
 COROSYNC_AUTH = '/etc/corosync/authkey'
@@ -25,7 +25,7 @@ def make_opts():
 
 def check_results(parallax, results):
     failures = []
-    for host, result in results.items():
+    for host, result in list(results.items()):
         if isinstance(result, parallax.Error):
             failures.add("%s: %s" % (host, str(result)))
     if failures:

@@ -4,9 +4,9 @@ import crm_init
 
 
 def select_interfaces(user_iface, data):
-    selections = dict([(host, user_iface) for host in data.keys()])
+    selections = dict([(host, user_iface) for host in list(data.keys())])
     if not user_iface:
-        for host, info in data.iteritems():
+        for host, info in data.items():
             for i in info['net']['interfaces']:
                 if i.get('Destination') == '0.0.0.0':
                     selections[host] = i['Iface']
@@ -18,7 +18,7 @@ def select_interfaces(user_iface, data):
                 return False
         return True
 
-    for host, iface in selections.iteritems():
+    for host, iface in selections.items():
         if not iface or invalid(host, iface):
             crm_script.exit_fail("No usable network interface on %s: %s" % (host, iface))
 
@@ -44,5 +44,5 @@ try:
 
     crm_script.exit_ok(ret)
 
-except Exception, e:
+except Exception as e:
     crm_script.exit_fail("Verification failed: %s" % (e))

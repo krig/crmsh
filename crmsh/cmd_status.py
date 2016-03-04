@@ -3,7 +3,7 @@
 # See COPYING for license information.
 
 import re
-import clidisplay
+from . import clidisplay
 from . import utils
 
 _crm_mon = None

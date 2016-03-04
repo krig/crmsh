@@ -79,7 +79,7 @@ def files_info():
         if os.path.isfile(f):
             try:
                 ret[f] = hashlib.sha1(open(f).read()).hexdigest()
-            except IOError, e:
+            except IOError as e:
                 ret[f] = "error: %s" % (e)
         else:
             ret[f] = ""
@@ -95,5 +95,5 @@ try:
         'files': files_info()
     }
     crm_script.exit_ok(data)
-except Exception, e:
+except Exception as e:
     crm_script.exit_fail(str(e))

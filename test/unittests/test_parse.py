@@ -96,7 +96,7 @@ class TestCliParser(unittest.TestCase):
     def setUp(self):
         self.parser = parse.CliParser()
         mockv = MockValidation()
-        for n, p in self.parser.parsers.iteritems():
+        for n, p in self.parser.parsers.items():
             p.validation = mockv
 
     def test_node(self):
@@ -158,7 +158,7 @@ class TestCliParser(unittest.TestCase):
 
         out = self.parser.parse('ms m0 resource params a=b')
         self.assertEqual(out.get('id'), 'm0')
-        print etree.tostring(out)
+        print(etree.tostring(out))
         self.assertEqual(['resource'], out.xpath('./crmsh-ref/@id'))
         self.assertEqual(['b'], out.xpath('instance_attributes/nvpair[@name="a"]/@value'))
 
@@ -269,7 +269,7 @@ class TestCliParser(unittest.TestCase):
 
     def test_order(self):
         out = self.parser.parse('order o1 Mandatory: [ A B sequential=true ] C')
-        print etree.tostring(out)
+        print(etree.tostring(out))
         self.assertEqual(['Mandatory'], out.xpath('/rsc_order/@kind'))
         self.assertEqual(2, len(out.xpath('/rsc_order/resource_set')))
         self.assertEqual(['false'], out.xpath('/rsc_order/resource_set/@require-all'))
@@ -443,7 +443,7 @@ class TestCliParser(unittest.TestCase):
         devs = ['stonith-vbox3-1-off', 'stonith-vbox3-2-off',
                 'stonith-vbox3-1-on', 'stonith-vbox3-2-on']
         out = self.parser.parse('fencing_topology vbox4: %s' % ','.join(devs))
-        print etree.tostring(out)
+        print(etree.tostring(out))
         self.assertEqual(1, len(out))
 
     def test_fencing_1114(self):

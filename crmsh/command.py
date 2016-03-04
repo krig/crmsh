@@ -98,7 +98,7 @@ def skill_level(new_level):
         def do_rmrf(self, cmd, args):
             ...
     '''
-    if isinstance(new_level, basestring):
+    if isinstance(new_level, str):
         levels = {'operator': 0, 'administrator': 1, 'expert': 2}
         if new_level.lower() not in levels:
             raise ValueError("Unknown skill level: " + new_level)
@@ -207,7 +207,7 @@ def fuzzy_get(items, s):
     def fuzzy_match(rx):
         matcher = re.compile(rx, re.I)
         matches = [c
-                   for m, c in items.iteritems()
+                   for m, c in items.items()
                    if matcher.match(m)]
         if len(matches) == 1:
             return matches[0]
@@ -287,11 +287,11 @@ at the current level.
         for o in out:
             if o.startswith('-') or o.startswith('_'):
                 continue
-            print '%-16s' % (o),
+            print('%-16s' % (o), end=' ')
             if ((i - 2) % 3) == 0:
-                print ''
+                print('')
             i += 1
-        print ''
+        print('')
 
     @help('''Navigate the level structure
 This command works similar to how `cd` works in a regular unix
@@ -368,7 +368,7 @@ Examples:
         '''
         return tab completions
         '''
-        return self._children.keys()
+        return list(self._children.keys())
 
     def get_child(self, child):
         '''
@@ -523,7 +523,7 @@ def is_valid_command_function(fn):
 
 
 def _check_args(fn, expected):
-    argnames = fn.func_code.co_varnames[:fn.func_code.co_argcount]
+    argnames = fn.__code__.co_varnames[:fn.__code__.co_argcount]
     if argnames != expected:
         raise ValueError(fn.__name__ +
                          ": Expected method with signature " + repr(expected))

@@ -13,6 +13,7 @@ from .utils import get_boolean, olist, canonical_boolean
 from .msg import common_err, syntax_err
 from . import xmlbuilder
 from . import xmlutil
+import collections
 
 
 class ParseError(Exception):
@@ -90,7 +91,7 @@ class BaseParser(object):
         tok = self.current_token()
         if not tok:
             return None
-        if isinstance(rx, basestring):
+        if isinstance(rx, str):
             if not rx.endswith('$'):
                 rx = rx + '$'
             self._lastmatch = re.match(rx, tok, re.IGNORECASE)
@@ -113,7 +114,7 @@ class BaseParser(object):
         if not self.try_match(rx):
             if errmsg:
                 self.err(errmsg)
-            elif isinstance(rx, basestring):
+            elif isinstance(rx, str):
                 self.err("Expected " + rx)
             else:
                 self.err("Expected " + rx.pattern.rstrip('$'))
@@ -284,7 +285,7 @@ class BaseParser(object):
         """
         t = self.match(self._DISPATCH_RE, errmsg=errmsg)
         t = 'parse_' + t.lower()
-        if hasattr(self, t) and callable(getattr(self, t)):
+        if hasattr(self, t) and isinstance(getattr(self, t), collections.Callable):
             return getattr(self, t)()
         self.rewind()  # rewind for more accurate error message
         self.err(errmsg)
@@ -347,7 +348,7 @@ class RuleParser(BaseParser):
         generator which matches attr_lists
         name_map: maps CLI name to XML name
         """
-        to_match = '|'.join(name_map.keys())
+        to_match = '|'.join(list(name_map.keys()))
         if self.try_match(to_match):
             name = self.matched(0).lower()
             yield self.match_attr_list(name, name_map[name])
@@ -523,7 +524,7 @@ class RuleParser(BaseParser):
         This is so for example: primitive foo Dummy state=1 is accepted when
         params is the implicit initial.
         """
-        names = olist(name_map.keys())
+        names = olist(list(name_map.keys()))
         oplist = olist([op for op in name_map if op.lower() in ('operations', 'op')])
         for op in oplist:
             del name_map[op]
@@ -1015,7 +1016,7 @@ class FencingOrderParser(BaseParser):
             lvl_generator = wrap_levels
 
         out = xmlbuilder.new('fencing-topology')
-        targets = defaultdict(repeat(1).next)
+        targets = defaultdict(repeat(1).__next__)
         for target, devices in lvl_generator():
             if isinstance(target, tuple):
                 c = xmlbuilder.child(out, 'fencing-level',
@@ -1162,7 +1163,7 @@ class AclParser(BaseParser):
 
     def _add_rule(self):
         rule = xmlbuilder.new(self.match(self._ACL_RIGHT_RE).lower())
-        eligible_specs = constants.acl_spec_map.values()
+        eligible_specs = list(constants.acl_spec_map.values())
         while self.has_tokens():
             a = self._expand_shortcuts(self.current_token().split(':', 1))
             if len(a) != 2 or a[0] not in eligible_specs:
@@ -1292,7 +1293,7 @@ class RawXMLParser(BaseParser):
         # they produce text elements
         try:
             e = etree.fromstring(xml_data)
-        except Exception, e:
+        except Exception as e:
             common_err("Cannot parse XML data: %s" % xml_data)
             self.err(e)
         if e.tag not in constants.cib_cli_map:
@@ -1570,7 +1571,7 @@ class CliParser(object):
             for p in l:
                 a += p.split()
             return a
-        except ValueError, e:
+        except ValueError as e:
             common_err(e)
             return False
 
@@ -1580,10 +1581,10 @@ class CliParser(object):
         Converts unicode to ascii, XML data to CLI format,
         lexing etc.
         '''
-        if isinstance(s, unicode):
+        if isinstance(s, str):
             try:
                 s = s.encode('ascii', errors='xmlcharrefreplace')
-            except Exception, e:
+            except Exception as e:
                 common_err(e)
                 return False
         if isinstance(s, str):

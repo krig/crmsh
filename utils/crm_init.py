@@ -74,7 +74,7 @@ def net_info():
         keys = data[1]
         for line in data[2:]:
             if len(line) == len(keys):
-                interfaces.append(dict(zip(keys, line)))
+                interfaces.append(dict(list(zip(keys, line))))
     else:
         interfaces.append({'error': err.strip()})
     ret['interfaces'] = interfaces
@@ -139,7 +139,7 @@ def verify(data):
     as much as possible before init/add.
     """
     def check_diskspace():
-        for host, info in data.iteritems():
+        for host, info in data.items():
             for mount, percent in info['disk']:
                 interesting = (mount == '/' or
                                mount.startswith('/var/log') or
@@ -148,7 +148,7 @@ def verify(data):
                     crm_script.exit_fail("Not enough space on %s:%s" % (host, mount))
 
     def check_services():
-        for host, info in data.iteritems():
+        for host, info in data.items():
             for svc in info['services']:
                 if svc['name'] == 'pacemaker' and svc['active'] == 'active':
                     crm_script.exit_fail("%s already running pacemaker" % (host))
@@ -173,10 +173,10 @@ def verify(data):
         check('distver', 'Distribution version differs')
         #check('version', 'Kernel version differs')
 
-    for host, info in data.iteritems():
+    for host, info in data.items():
         verify_host(host, info)
 
-    compare_system((h, info['system']) for h, info in data.iteritems())
+    compare_system((h, info['system']) for h, info in data.items())
 
     check_diskspace()
     check_services()

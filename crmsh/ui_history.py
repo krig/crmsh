@@ -108,7 +108,7 @@ class History(command.UI):
     def do_source(self, context, src=None):
         "usage: source {<dir>|<file>|live}"
         if src is None:
-            print "Current source: %s" % (options.history)
+            print("Current source: %s" % (options.history))
             return True
         self._init_source()
         if src != options.history:
@@ -199,7 +199,7 @@ class History(command.UI):
         'Send a decompressed self.pe_file to ptest'
         try:
             s = bz2.decompress(open(self.pe_file).read())
-        except IOError, msg:
+        except IOError as msg:
             common_err("open: %s" % msg)
             return False
         return utils.run_ptest(s, nograph, scores, utilization, actions, verbosity)
@@ -225,9 +225,9 @@ class History(command.UI):
                 if a and len(a) == 2 and not utils.check_range(a):
                     common_err("%s: invalid peinputs range" % a)
                     return False
-                l += crm_report().pelist(a, long=("v" in opt_l))
+                l += crm_report().pelist(a, int=("v" in opt_l))
         else:
-            l = crm_report().pelist(long=("v" in opt_l))
+            l = crm_report().pelist(int=("v" in opt_l))
         if not l:
             return False
         s = '\n'.join(l)
@@ -520,7 +520,7 @@ class History(command.UI):
             cib_factory.refresh()
         if not s:
             return False
-        print utils.str2tmp(s)
+        print(utils.str2tmp(s))
 
     @command.skill_level('administrator')
     @command.completers(compl.join(compl.call(lambda: crm_report().peinputs_list()),
@@ -623,7 +623,7 @@ class History(command.UI):
         "usage: session [{save|load|delete} <name> | pack [<name>] | update | list]"
         self._init_source()
         if not subcmd:
-            print "current session: %s" % self.current_session
+            print("current session: %s" % self.current_session)
             return True
         # verify arguments
         if subcmd not in ("save", "load", "pack", "delete", "list", "update"):

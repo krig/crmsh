@@ -140,20 +140,20 @@ def help_overview():
     '''
     _load_help()
     s = "Available topics:\n\n"
-    for title, topic in _TOPICS.iteritems():
+    for title, topic in _TOPICS.items():
         s += '\t' + _titleline(title, topic.short)
     s += "\n"
     s += "Available commands:\n\n"
 
-    for title, command in _COMMANDS.get('root', {}).iteritems():
+    for title, command in _COMMANDS.get('root', {}).items():
         if not command.is_alias():
             s += '\t' + _titleline(title, command.short)
     s += "\n"
 
-    for title, level in sorted(_LEVELS.iteritems(), key=lambda x: x[0]):
+    for title, level in sorted(iter(_LEVELS.items()), key=lambda x: x[0]):
         if title != 'root' and title in _COMMANDS:
             s += '\t' + _titleline(title, level.short, suffix='/')
-            for cmdname, cmd in sorted(_COMMANDS[title].iteritems(), key=lambda x: x[0]):
+            for cmdname, cmd in sorted(iter(_COMMANDS[title].items()), key=lambda x: x[0]):
                 if cmdname in _hidden_commands or cmdname.startswith('_'):
                     continue
                 if not cmd.is_alias():
@@ -169,14 +169,14 @@ def help_topics():
     '''
     _load_help()
     s = ''
-    for title, topic in _TOPICS.iteritems():
+    for title, topic in _TOPICS.items():
         s += '\t' + _titleline(title, topic.short)
     return HelpEntry('Available topics\n', s, generated=True)
 
 
 def list_help_topics():
     _load_help()
-    return _TOPICS.keys()
+    return list(_TOPICS.keys())
 
 
 def help_topic(topic):
@@ -329,15 +329,15 @@ def _load_help():
 
     def append_cmdinfos():
         "append command information to level descriptions"
-        for lvlname, level in _LEVELS.iteritems():
+        for lvlname, level in _LEVELS.items():
             if lvlname in _COMMANDS:
                 level.long += "\n\nCommands:\n"
-                for cmdname, cmd in sorted(_COMMANDS[lvlname].iteritems(), key=lambda x: x[0]):
+                for cmdname, cmd in sorted(iter(_COMMANDS[lvlname].items()), key=lambda x: x[0]):
                     if cmdname in _hidden_commands or cmdname.startswith('_'):
                         continue
                     level.long += "\t" + _titleline(cmdname, cmd.short)
                 level.long += "\n"
-                for cmdname, cmd in sorted(_COMMANDS[lvlname].iteritems(), key=lambda x: x[0]):
+                for cmdname, cmd in sorted(iter(_COMMANDS[lvlname].items()), key=lambda x: x[0]):
                     if cmdname in _hidden_commands:
                         level.long += "\t" + _titleline(cmdname, cmd.short)
 
@@ -345,7 +345,7 @@ def _load_help():
         "root commands appear as levels"
 
         strip_topics = []
-        for tname, topic in _LEVELS.iteritems():
+        for tname, topic in _LEVELS.items():
             if not _COMMANDS.get(tname):
                 strip_topics.append(tname)
         for t in strip_topics:
@@ -365,7 +365,7 @@ def _load_help():
             _COMMANDS[lvlname][alias] = HelpEntry(info.short, info.long, (alias, command))
 
         def add_aliases_for_level(lvl):
-            for name, info in lvl._children.iteritems():
+            for name, info in lvl._children.items():
                 for alias in info.aliases:
                     add_help_for_alias(lvl.name, info.name, alias)
                 if info.level:
@@ -399,7 +399,7 @@ def _load_help():
         fixup_root_commands()
         fixup_help_aliases()
         fixup_topics()
-    except IOError, msg:
+    except IOError as msg:
         common_err("Help text not found! %s" % (msg))
 
 # vim:ts=4:sw=4:et:

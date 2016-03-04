@@ -2,6 +2,7 @@
 # See COPYING for license information.
 
 import re
+import collections
 
 
 _head_re = re.compile(r'\{\{(\#|\^)?([A-Za-z0-9\#\$:_-]+)\}\}')
@@ -41,7 +42,7 @@ def _resolve(path, context, strict):
             p, r = p.get(r[0]), r[1:]
         if strict and r:
             continue
-        if callable(p):
+        if isinstance(p, collections.Callable):
             p = p()
         if p is not None:
             return p

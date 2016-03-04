@@ -37,6 +37,6 @@ def package_data(pkg):
 
 def main():
     data = [package_data(pkg) for pkg in sys.argv[1:]]
-    print json.dumps(data)
+    print(json.dumps(data))
 
 main()

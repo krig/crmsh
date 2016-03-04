@@ -17,10 +17,10 @@ for f in sys.argv[1:]:
             os.remove(f)
         elif os.path.isdir(f):
             if os.path.isfile(os.path.join(f, 'crm_script.debug')):
-                print open(os.path.join(f, 'crm_script.debug')).read()
+                print(open(os.path.join(f, 'crm_script.debug')).read())
             shutil.rmtree(f)
-    except OSError, e:
+    except OSError as e:
         errors.append(e)
 if errors:
-    print >>sys.stderr, '\n'.join(errors)
+    print('\n'.join(errors), file=sys.stderr)
     sys.exit(1)

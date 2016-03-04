@@ -288,7 +288,7 @@ def pull_configuration(from_node):
     '''
     local_path = conf()
     _, fname = tmpfiles.create()
-    print "Retrieving %s:%s..." % (from_node, local_path)
+    print("Retrieving %s:%s..." % (from_node, local_path))
     cmd = ['scp', '-qC',
            '-o', 'PasswordAuthentication=no',
            '-o', 'StrictHostKeyChecking=no',
@@ -302,9 +302,9 @@ def pull_configuration(from_node):
             oldata = open(local_path).read()
             oldhash = hash(oldata)
             if newhash == oldhash:
-                print "No change."
+                print("No change.")
                 return
-        print "Writing %s..."
+        print("Writing %s...")
         local_file = open(local_path, 'w')
         local_file.write(data)
         local_file.close()

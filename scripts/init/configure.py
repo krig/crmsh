@@ -36,7 +36,7 @@ def run_ssh():
                 crm_script.exit_fail("Failed to generate SSH key")
         _authorize_key(keypath)
         crm_script.exit_ok(True)
-    except IOError, e:
+    except IOError as e:
         crm_script.exit_fail(str(e))
 
 
@@ -81,7 +81,7 @@ def make_bindnetaddr():
 def run_corosync():
     # create corosync.conf
 
-    nodelist = crm_script.output(2).keys()
+    nodelist = list(crm_script.output(2).keys())
     nodelist_txt = ""
     for i, node in enumerate(nodelist):
         nodelist_txt += """
@@ -111,7 +111,7 @@ def run_corosync():
                                  transport=crm_script.param('transport'),
                                  nodelist=nodelist_txt,
                                  quorum=quorum_txt)
-    except Exception, e:
+    except Exception as e:
         crm_script.exit_fail(str(e))
 
     # start cluster

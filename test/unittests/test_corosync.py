@@ -31,7 +31,7 @@ def _valid(parser):
 
 
 def _print(parser):
-    print parser.to_string()
+    print(parser.to_string())
 
 
 class TestCorosyncParser(unittest.TestCase):

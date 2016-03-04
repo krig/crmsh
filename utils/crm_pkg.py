@@ -16,7 +16,7 @@ def get_platform():
 
 
 def fail(msg):
-    print >>sys.stderr, msg
+    print(msg, file=sys.stderr)
     sys.exit(1)
 
 
@@ -76,9 +76,9 @@ class Zypper(PackageManager):
         return None
 
     def is_installed(self, name):
-        if not isinstance(self._rpm, basestring):
+        if not isinstance(self._rpm, str):
             raise IOError(str(self._rpm))
-        if not isinstance(name, basestring):
+        if not isinstance(name, str):
             raise IOError(str(name))
         cmd = [self._rpm, '--query', '--info', name]
         rc, stdout, stderr = run(cmd)
@@ -229,7 +229,7 @@ def manage_package(pkg, state):
         #'apt-get': Apt,
         #'pacman': Pacman
     }
-    for name, mgr in managers.iteritems():
+    for name, mgr in managers.items():
         exe = is_program(name)
         if exe:
             rc, stdout, stderr, changed = mgr().dispatch(pkg, state)
@@ -262,6 +262,6 @@ def main():
     if not args.name or not args.state:
         raise IOError("Bad arguments: %s" % (sys.argv))
     data = manage_package(args.name, args.state)
-    print json.dumps(data)
+    print(json.dumps(data))
 
 main()

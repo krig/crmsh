@@ -163,7 +163,7 @@ class RADriver(object):
         real_op = (op == "probe" and "monitor" or op)
         cmd = self.exec_cmd(real_op)
         common_debug("running %s on %s" % (real_op, nodes))
-        for attr in self.rscenv.keys():
+        for attr in list(self.rscenv.keys()):
             # shell doesn't allow "-" in var names
             envvar = attr.replace("-", "_")
             cmd = "%s=%s %s" % (envvar, quote(self.rscenv[attr]), cmd)
@@ -459,7 +459,7 @@ def call_resource(rsc, cmd, nodes, local_only):
 
     from . import ra
     agent = ra.get_ra(rsc)
-    actions = agent.actions().keys() + ['meta-data', 'validate-all']
+    actions = list(agent.actions().keys()) + ['meta-data', 'validate-all']
 
     if cmd not in actions:
         common_err("action '%s' not supported by %s" % (cmd, ra.name))

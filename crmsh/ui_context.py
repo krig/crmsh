@@ -73,13 +73,13 @@ class Context(object):
                     break
             if cmd:
                 rv = self.execute_command() is not False
-        except ValueError, msg:
+        except ValueError as msg:
             if config.core.debug:
                 import traceback
                 traceback.print_exc()
             common_err("%s: %s" % (self.get_qualified_name(), msg))
             rv = False
-        except IOError, msg:
+        except IOError as msg:
             if config.core.debug:
                 import traceback
                 traceback.print_exc()
@@ -190,7 +190,7 @@ class Context(object):
                     self._rl_words = [w for w in completions if matching(w)]
                 else:
                     self._rl_words = completions
-            except Exception, msg:
+            except Exception as msg:
                 #logging.exception(msg)
                 self.clear_readline_cache()
 
@@ -318,7 +318,7 @@ class Context(object):
         '''
         ok = self.current_level().end_game()
         if options.interactive and not options.batch:
-            print "bye"
+            print("bye")
         if ok is False and rc == 0:
             rc = 1
         sys.exit(rc)

@@ -22,7 +22,7 @@ def teardown_func():
 def test_cib_schema_change():
     "Changing the validate-with CIB attribute"
     copy_of_cib = copy.copy(factory.cib_orig)
-    print etree.tostring(copy_of_cib, pretty_print=True)
+    print(etree.tostring(copy_of_cib, pretty_print=True))
     tmp_cib_objects = factory.cib_objects
     factory.cib_objects = []
     factory.change_schema("pacemaker-1.1")

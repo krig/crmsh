@@ -46,7 +46,7 @@ def read_toc_data(infile, debug):
 def generate_toc(infile, outfile, debug):
 
     if debug:
-        print "Infile:", infile
+        print("Infile:", infile)
     toc = read_toc_data(infile, debug)
     '''
     toc_data = []
@@ -71,11 +71,11 @@ def generate_toc(infile, outfile, debug):
     # Write TOC to outfile
     if outfile:
         if debug:
-            print "Writing TOC:"
-            print "----"
-            print toc
-            print "----"
-            print "Outfile:", outfile
+            print("Writing TOC:")
+            print("----")
+            print(toc)
+            print("----")
+            print("Outfile:", outfile)
         fil = open(outfile)
         f = fil.readlines()
         fil.close()
@@ -94,7 +94,7 @@ def generate_v2(page, debug):
         m = section.match(line)
         if m:
             if debug:
-                print "toc_data: %s" % str(((m.group('depth'), m.group('text'), m.group('id'))))
+                print("toc_data: %s" % str(((m.group('depth'), m.group('text'), m.group('id')))))
             toc_data.append((m.group('depth'), m.group('text'), m.group('id')))
 
     toc = ''
@@ -124,7 +124,7 @@ def main():
     debug = args.debug
     outfile = args.output
     infile = args.input
-    print "+ %s -> %s" % (infile, outfile)
+    print("+ %s -> %s" % (infile, outfile))
     gen = False
     for tocpage in TOC_PAGES:
         if not gen and outfile.endswith(tocpage):

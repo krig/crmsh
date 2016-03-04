@@ -54,16 +54,16 @@ class Sorter(object):
 
     def finishsection(self):
         if self.current_section:
-            print self.current_section[1],
+            print(self.current_section[1], end=' ')
             for name, text in sorted(self.subsections, key=lambda x: x[0]):
-                print text,
+                print(text, end=' ')
         self.current_section = None
         self.subsections = []
 
     def preprint(self, line):
         if self.re_section.match(line):
             return self.beginsection(line)
-        print line,
+        print(line, end=' ')
         return self.preprint
 
     def run(self, lines):
@@ -72,9 +72,9 @@ class Sorter(object):
             prevaction = action
             action = action(line)
             if action is None:
-                print prevaction
-                print self.current_section
-                print self.current_subsection
+                print(prevaction)
+                print(self.current_section)
+                print(self.current_subsection)
                 sys.exit(1)
         if self.current_section:
             self.finishsection()

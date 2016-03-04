@@ -286,7 +286,7 @@ def compgen():
     if len(last_word) > 1 and ':' in last_word[1]:
         idx = last_word[1].rfind(':')
         for w in context.complete(line):
-            print(w[idx+1:])
+            print((w[idx+1:]))
     else:
         for w in context.complete(line):
             print(w)
@@ -322,7 +322,7 @@ def profile_run(context, user_args):
         stats_cmd = "; ".join(['import pstats',
                                's = pstats.Stats("%s")' % options.profile,
                                's.sort_stats("cumulative").print_stats()'])
-        print("python -c '%s' | less" % (stats_cmd))
+        print(("python -c '%s' | less" % (stats_cmd)))
     return 0
 
 
