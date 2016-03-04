@@ -4,7 +4,7 @@
 from distutils.core import setup
 import os
 
-SRC_PATH = os.path.relpath(os.path.join(os.path.dirname(__file__), "modules"))
+SRC_PATH = os.path.relpath(os.path.join(os.path.dirname(__file__), "crmsh"))
 
 setup(name='crmsh',
       version='2.2.0',

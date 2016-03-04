@@ -1,12 +1,6 @@
 import os
 import sys
 
-try:
-    import modules
-    sys.modules['crmsh'] = sys.modules['modules']
-except ImportError, e:
-    pass
-
 from crmsh import msg
 from crmsh import config
 from crmsh import options
