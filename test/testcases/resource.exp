@@ -85,45 +85,56 @@ resource p0 is NOT running
   </configuration>
 </cib>
 
-.SETENV showobj=c2
-.TRY resource maintenance c2 on
+.SETENV showobj=p2
+.TRY resource maintenance p2 on
 .INP: configure
 .INP: _regtest on
-.INP: show xml c2
+.INP: show xml p2
 <?xml version="1.0" ?>
 <cib>
   <configuration>
     <crm_config/>
     <nodes/>
     <resources>
-      <clone id="c2">
-        <meta_attributes id="c2-meta_attributes">
-          <nvpair id="c2-meta_attributes-maintenance" name="maintenance" value="true"/>
+      <master id="m1">
+        <meta_attributes id="m1-meta_attributes">
+          <nvpair id="m1-meta_attributes-maintenance" name="maintenance" value="true"/>
         </meta_attributes>
-        <primitive id="p1" class="ocf" provider="pacemaker" type="Dummy"/>
-      </clone>
+        <primitive id="p2" class="ocf" provider="heartbeat" type="Delay">
+          <instance_attributes id="p2-instance_attributes">
+            <nvpair name="startdelay" value="2" id="p2-instance_attributes-startdelay"/>
+            <nvpair name="mondelay" value="2" id="p2-instance_attributes-mondelay"/>
+            <nvpair name="stopdelay" value="2" id="p2-instance_attributes-stopdelay"/>
+          </instance_attributes>
+        </primitive>
+      </master>
     </resources>
     <constraints/>
   </configuration>
 </cib>
 
-.SETENV showobj=c2
-.TRY resource maintenance c2 off
+.TRY resource maintenance p2 off
 .INP: configure
 .INP: _regtest on
-.INP: show xml c2
+.INP: show xml p2
 <?xml version="1.0" ?>
 <cib>
   <configuration>
     <crm_config/>
     <nodes/>
     <resources>
-      <clone id="c2">
-        <meta_attributes id="c2-meta_attributes">
-          <nvpair id="c2-meta_attributes-maintenance" name="maintenance" value="false"/>
+      <master id="m1">
+        <meta_attributes id="m1-meta_attributes">
+          <nvpair id="m1-meta_attributes-maintenance" name="maintenance" value="false"/>
         </meta_attributes>
-        <primitive id="p1" class="ocf" provider="pacemaker" type="Dummy"/>
-      </clone>
+        <primitive id="p2" class="ocf" provider="heartbeat" type="Delay">
+          <instance_attributes id="p2-instance_attributes">
+            <nvpair name="startdelay" value="2" id="p2-instance_attributes-startdelay"/>
+            <nvpair name="mondelay" value="2" id="p2-instance_attributes-mondelay"/>
+            <nvpair name="stopdelay" value="2" id="p2-instance_attributes-stopdelay"/>
+          </instance_attributes>
+        </primitive>
+      </master>
     </resources>
     <constraints/>
   </configuration>
